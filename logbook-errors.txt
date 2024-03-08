@@ -1,0 +1,19 @@
+P184 dual received off by +1.0
+P186 landings off by -10
+P222 landing off by another -5. Total now off by -15.
+P227 landing off by another -1. Total now off by -16.
+
+P213 x/c off by -10.0
+P240 x/c off another -2.5.  Total now off by -12.5
+P263 x/c off by + 1.0.  Total now off by -11.5
+
+P190 PIC off by +2.0
+P204 PIC off by +1.0; total now off by +3.0
+P241 PIC off by +1.0; total now off by +4.0
+P242 PIC off by +1.0; total now off by +5.0
+P262 landing off by another +10.. Total now off by +15.0.
+P263 PIC carryover off by +.03; total now off by +15.3
+
+P219 Hood off by -1.4
+P240 hood off another -1.2; total now off by 2.6
+P256 hood off by +1.0; total now off by 1.6
