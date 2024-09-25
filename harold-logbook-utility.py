@@ -31,47 +31,6 @@ def GetCommandLineArgs ():
 
 ###############################################################################
 #
-
-fieldsFF = ['Date', 'AircraftID', 'From', 'To', 'Route', 'TimeOut',
-            'TimeOff', 'TimeOn', 'TimeIn', 'OnDuty', 'OffDuty', 'TotalTime',
-            'PIC', 'SIC', 'Night', 'Solo', 'CrossCountry', 'NVG', 'NVG Ops',
-            'Distance', 'DayTakeoffs', 'DayLandingsFullStop',
-            'NightTakeoffs', 'NightLandingsFullStop', 'AllLandings',
-            'ActualInstrument', 'SimulatedInstrument', 'HobbsStart',
-            'HobbsEnd', 'TachStart', 'TachEnd', 'Holds', 'Approach1',
-            'Approach2', 'Approach3', 'Approach4', 'Approach5', 'Approach6',
-            'DualGiven', 'DualReceived', 'SimulatedFlight',
-            'GroundTraining', 'InstructorName', 'InstructorComments',
-            'Person1', 'Person2', 'Person3', 'Person4', 'Person5',
-            'Person6', 'FlightReview', 'Checkride', 'IPC',
-            'NVG Proficiency', 'FAA6158', 'PilotComments']
-
-fieldsAll = copy.copy (fieldsFF)
-
-fieldsAll.append ('LogbookPage')
-fieldsAll.append ('Approaches')
-fieldsAll.append ('Make')
-fieldsAll.append ('GliderHeli')
-fieldsAll.append ('Helicopter')
-fieldsAll.append ('SEL')
-fieldsAll.append ('MEL')
-fieldsAll.append ('Day')
-fieldsAll.append ('Simulator')
-
-entryAll = {}
-for field in fieldsAll:
-    entryAll[field] = ''
-
-fieldsAC = ['AircraftID', 'EquipmentType', 'TypeCode', 'Year', 'Make', 'Model',
-            'Category', 'Class', 'GearType', 'EngineType', 'Complex', 'TAA',
-            'HighPerformance', 'Pressurized', '', '', '', '', '', '', '', '',
-            '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-            '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
-
-
-
-###############################################################################
-#
 def parseFF (path, after_date):
     '''For files exported by ForeFlight'''
     
@@ -106,6 +65,21 @@ def parseFF (path, after_date):
             elif section=='Flights Table':
                 if cols[0]=='Date':
                     fieldsFF = cols
+                    fieldsAll = copy.copy (fieldsFF)
+
+                    fieldsAll.append ('Approaches')
+                    fieldsAll.append ('Make')
+                    fieldsAll.append ('GliderHeli')
+                    fieldsAll.append ('Helicopter')
+                    fieldsAll.append ('SEL')
+                    fieldsAll.append ('MEL')
+                    fieldsAll.append ('Day')
+                    fieldsAll.append ('Simulator')
+
+                    entryAll = {}
+                    for field in fieldsAll:
+                        entryAll[field] = ''
+
                 else:
                     entry = copy.copy (entryAll)
                     if len(cols[-1]) and cols[-1][0]=='"' and cols[-1][-1]=='"':
@@ -117,7 +91,7 @@ def parseFF (path, after_date):
                     else:
                         entry['Day'] = entry['TotalTime']
 
-                    category = acTable[entry['AircraftID']][6]
+                    category = acTable[entry['AircraftID']][7]   # FIXME - should not have to use subscript
                     if category == 'airplane_single_engine_land':
                         entry['SEL'] = entry['TotalTime']
                     elif category == 'airplane_multi_engine_land':
