@@ -80,6 +80,8 @@ def parseFF (path, after_date):
                     for field in fieldsAll:
                         entryAll[field] = ''
 
+                    acTable['N429CP'] = acTable['N910CP']        # FIXME
+
                 else:
                     entry = copy.copy (entryAll)
                     if len(cols[-1]) and cols[-1][0]=='"' and cols[-1][-1]=='"':
