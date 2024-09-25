@@ -184,6 +184,8 @@ def printLogEntries (logEntries, args):
         entnum += 1
         page = int(entnum / 7 + 1)
         if entnum%7==1:
+            print ()
+            print (226*'=')
             print ('Page ', page)
             c = 0
             for col in columns:
@@ -227,6 +229,7 @@ def printLogEntries (logEntries, args):
             c += 1
         print ()
         if entnum%7==0:
+            print (76*' ', 149*'-')
             print (76*' ', 'Page total    ', end='')
             for  c in range(COL_NUMBERS_START-1,len(columns)):
                 if columns[c]['type']=='int':
