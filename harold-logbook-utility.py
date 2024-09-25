@@ -105,7 +105,7 @@ def parseFF (path, after_date):
 
             elif section=='Flights Table':
                 if cols[0]=='Date':
-                    continue
+                    fieldsFF = cols
                 else:
                     entry = copy.copy (entryAll)
                     if len(cols[-1]) and cols[-1][0]=='"' and cols[-1][-1]=='"':
