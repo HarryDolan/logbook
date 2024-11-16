@@ -17,19 +17,14 @@ df_flights = None
 
 with open (path, 'r') as ff_file:
     lines = csv.reader(ff_file)
-    lnum = 0
     for line in lines:
-        lnum += 1
         if line[0]=='ForeFlight Logbook Import':
             section = "header"
-            print (lnum,line)
         elif line[0]=='Aircraft Table':
             section = 'aircraft'
-            print (lnum,line)
             df_aircraft = pd.DataFrame (columns=next(lines))
         elif line[0]=='Flights Table':
             section = 'flights'
-            print (lnum,line)
             df_flights = pd.DataFrame (columns=next(lines))
         elif section=='aircraft':
             df_aircraft.loc[len(df_aircraft)] = line
@@ -40,3 +35,13 @@ with open (path, 'r') as ff_file:
 
 print (df_aircraft)
 print(df_flights)
+
+for index, row in df_flights.iterrows():
+    num = index+1
+    page = num//7 + 1
+    if num%7 == 1:
+        print (100*'=')
+        print ("Page")
+    print (f'{row['Date']:} {row['AircraftID']:} {row['AircraftID']:} {row['From']:} {row['To']:}')
+    if (index+1)%7 == 0:
+        print ('---------------------------')
