@@ -69,12 +69,12 @@ for index, row in df_flights.iterrows():
     num += 1
     page = num//7 + 1
     if num%7 == 1:
-        print (184*'=')
+        print (185*'=')
         print (f'Page {page:}')
-        print ('Date       Model    Ident   From To   Comments                       Ldgs  Gldr  Heli      SEL      MEL      X/C      Day    Night  Act.Ins.  Hooded   Dual R      PIC   Dual G    Total')
+        print ('Date       Model      Ident   From To  Comments                       Ldgs  Gldr  Heli      SEL      MEL      X/C      Day    Night  Act.Ins.  Hooded   Dual R      PIC   Dual G    Total')
 
-    print (f'{row['Date']:} {row['Model']:} ', end='')
-    print (f'{row['AircraftID']:>8s} {row['From']:>6} {row['To']:>6} ', end='')
+    print (f'{row['Date']:10} {row['Model']:10} ', end='')
+    print (f'{row['AircraftID']:>6} {row['From']:>4} {row['To']:>4} ', end='')
     print (f'{row['PilotComments'][:30]:>30s} {int(row['AllLandings']):4d} ', end='')
     print (f'{row['Glider']:>5} {row['Helicopter']:>5} ', end='')
     print (f'{row['ASEL']:>8} {row['AMEL']:>8} ', end='')
@@ -87,8 +87,8 @@ for index, row in df_flights.iterrows():
     print ()
     if num%7 == 0:
         nlandings = df_flights.iloc[num-7:num]['AllLandings'].astype(int).sum()
-        print (52*' ',130*'-')
-        print (52*' ',f'Page Total       {nlandings:>5}')
-        print (52*' ','Amount forward    0')
-        print (52*' ','Total to date     0')
+        print (51*' ',133*'-')
+        print (51*' ',f'Page Total       {nlandings:>5}')
+        print (51*' ','Amount forward    0')
+        print (51*' ','Total to date     0')
         print ()
