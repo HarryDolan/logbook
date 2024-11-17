@@ -10,6 +10,7 @@ import csv
 import pandas as pd
 
 path='test.csv'
+path='logbook_2024-11-15_02_59_43.csv'
 section = None
 df_aircraft = None
 df_flights = None
@@ -40,12 +41,15 @@ df_flights['ASEL'] = '0.0'
 df_flights['AMEL'] = '0.0'
 df_flights['Day'] = '0.0'
 
+if df_flights.loc[0]['Date'] > df_flights.loc[len(df_flights)-1]['Date']:
+    df_flights = df_flights.iloc[::-1]      # reverse order of rows
 
+num = 0
 for index, row in df_flights.iterrows():
-    num = index+1
+    num += 1
     page = num//7 + 1
     if num%7 == 1:
-        print (183*'=')
+        print (184*'=')
         print (f'Page {page:}')
         print ('Date       Model    Ident   From To   Comments                       Ldgs  Gldr  Heli      SEL      MEL      X/C      Day    Night  Act.Ins.  Hooded   Dual R      PIC   Dual G    Total')
 
@@ -61,9 +65,10 @@ for index, row in df_flights.iterrows():
     print (f'{row['DualReceived']:>8} ', end='')
     print (f'{row['TotalTime']:>8} ', end='')
     print ()
-    if (index+1)%7 == 0:
+    if num%7 == 0:
+        nlandings = df_flights.iloc[num-7:num]['AllLandings'].astype(int).sum()
         print (52*' ',130*'-')
-        print (52*' ','Page Total        0')
+        print (52*' ',f'Page Total       {nlandings:>5}')
         print (52*' ','Amount forward    0')
         print (52*' ','Total to date     0')
         print ()
