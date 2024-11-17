@@ -8,6 +8,7 @@ Created on Fri Nov 15 16:11:37 2024
 
 import csv
 import pandas as pd
+import numpy as np
 
 path='test.csv'
 path='logbook_2024-11-15_02_59_43.csv'
@@ -34,12 +35,31 @@ with open (path, 'r') as ff_file:
 
 df_aircraft.set_index("AircraftID", inplace = True)
 
-df_flights = df_flights.assign (TypeCode = lambda x: (df_aircraft.loc[x.loc[1]['AircraftID']]['TypeCode']))
+
 df_flights['Glider'] = '0.0'
 df_flights['Helicopter'] = '0.0'
 df_flights['ASEL'] = '0.0'
 df_flights['AMEL'] = '0.0'
 df_flights['Day'] = '0.0'
+df_flights['Model'] = ''
+for index in range(len(df_flights)):
+    aircraftID = df_flights['AircraftID'][index]
+    if aircraftID!='':
+        aircraftModel = df_aircraft.loc[aircraftID]['TypeCode']
+        df_flights['Model'].loc[index] = aircraftModel
+        aircraftCategory = df_aircraft.loc[aircraftID]['Category/Class']
+        if aircraftCategory=='glider':
+            df_flights['Glider'].loc[index] = df_flights['TotalTime'].loc[index]
+        elif aircraftCategory=='rotorcraft_helicopter':
+            df_flights['Helicopter'].loc[index] = df_flights['TotalTime'].loc[index]
+        elif aircraftCategory=='airplane_single_engine_land':
+            df_flights['ASEL'].loc[index] = df_flights['TotalTime'].loc[index]
+        elif aircraftCategory=='airplane_multi_engine_land':
+            df_flights['AMEL'].loc[index] = df_flights['TotalTime'].loc[index]
+        if df_flights['TotalTime'].loc[index] and df_flights['Night'].loc[index]:
+            day = float(df_flights['TotalTime'].loc[index]) - float(df_flights['Night'].loc[index])
+            df_flights['Day'].loc[index] = f'{day:8.1f}'
+
 
 if df_flights.loc[0]['Date'] > df_flights.loc[len(df_flights)-1]['Date']:
     df_flights = df_flights.iloc[::-1]      # reverse order of rows
@@ -53,7 +73,7 @@ for index, row in df_flights.iterrows():
         print (f'Page {page:}')
         print ('Date       Model    Ident   From To   Comments                       Ldgs  Gldr  Heli      SEL      MEL      X/C      Day    Night  Act.Ins.  Hooded   Dual R      PIC   Dual G    Total')
 
-    print (f'{row['Date']:} {row['TypeCode']:>5} ', end='')
+    print (f'{row['Date']:} {row['Model']:} ', end='')
     print (f'{row['AircraftID']:>8s} {row['From']:>6} {row['To']:>6} ', end='')
     print (f'{row['PilotComments'][:30]:>30s} {int(row['AllLandings']):4d} ', end='')
     print (f'{row['Glider']:>5} {row['Helicopter']:>5} ', end='')
