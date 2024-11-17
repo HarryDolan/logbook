@@ -5,12 +5,16 @@ Created on Fri Nov 15 16:11:37 2024
 
 @author: dolan
 """
-
+import sys
 import csv
 import pandas as pd
 
-path='test.csv'
-path='logbook_2024-11-15_02_59_43.csv'
+if len(sys.argv)==2:
+    path = sys.argv[1]
+else:
+    print ("Need one argument: file name.")
+    
+
 section = None
 df_aircraft = None
 df_flights = None
@@ -37,8 +41,8 @@ df_aircraft.set_index("AircraftID", inplace = True)
 
 df_flights['Glider'] = '0.0'
 df_flights['Helicopter'] = '0.0'
-df_flights['ASEL'] = '0.0'
-df_flights['AMEL'] = '0.0'
+df_flights['SEL'] = '0.0'
+df_flights['MEL'] = '0.0'
 df_flights['Day'] = '0.0'
 df_flights['Model'] = ''
 for index in range(len(df_flights)):
@@ -47,6 +51,7 @@ for index in range(len(df_flights)):
         aircraftModel = df_aircraft.loc[aircraftID]['TypeCode']
         df_flights.loc[index,'Model'] = aircraftModel
         aircraftCategory = df_aircraft.loc[aircraftID]['Category/Class']
+
         if aircraftCategory=='glider':
             df_flights.loc[index,'Glider'] = df_flights['TotalTime'].loc[index]
         elif aircraftCategory=='rotorcraft_helicopter':
@@ -55,8 +60,12 @@ for index in range(len(df_flights)):
             df_flights.loc[index,'SEL'] = df_flights['TotalTime'].loc[index]
         elif aircraftCategory=='airplane_multi_engine_land':
             df_flights.loc[index,'MEL'] = df_flights['TotalTime'].loc[index]
-        if df_flights['TotalTime'].loc[index] and df_flights['Night'].loc[index]:
-            day = float(df_flights['TotalTime'].loc[index]) - float(df_flights['Night'].loc[index])
+
+        if df_flights['TotalTime'].loc[index] != '':
+            if df_flights['TotalTime'].loc[index] and df_flights['Night'].loc[index]:
+                day = float(df_flights['TotalTime'].loc[index]) - float(df_flights['Night'].loc[index])
+            else:
+                day = float(df_flights['TotalTime'].loc[index])
             df_flights.loc[index,'Day'] = f'{day:8.1f}'
 
 
@@ -79,7 +88,7 @@ columns = [
         {'key':  'CrossCountry',         'type': 'float', 'pwidth':  8, 'ptitle':'X/C'},
         {'key':  'Day',                  'type': 'float', 'pwidth':  8, 'ptitle':'Day'},
         {'key':  'Night',                'type': 'float', 'pwidth':  8, 'ptitle':'Night'},
-        {'key':  'ActualInstrument',     'type': 'float', 'pwidth':  8, 'ptitle':'Act.Ins.'},
+        {'key':  'ActualInstrument',     'type': 'float', 'pwidth':  8, 'ptitle':'Inst'},
         {'key':  'SimulatedInstrument',  'type': 'float', 'pwidth':  8, 'ptitle':'Hooded'},
         {'key':  'DualReceived',         'type': 'float', 'pwidth':  8, 'ptitle':'Dual R'},
         {'key':  'PIC',                  'type': 'float', 'pwidth':  8, 'ptitle':'PIC'},
