@@ -46,19 +46,19 @@ for index in range(len(df_flights)):
     aircraftID = df_flights['AircraftID'][index]
     if aircraftID!='':
         aircraftModel = df_aircraft.loc[aircraftID]['TypeCode']
-        df_flights['Model'].loc[index] = aircraftModel
+        df_flights.loc[index,'Model'] = aircraftModel
         aircraftCategory = df_aircraft.loc[aircraftID]['Category/Class']
         if aircraftCategory=='glider':
-            df_flights['Glider'].loc[index] = df_flights['TotalTime'].loc[index]
+            df_flights.loc[index,'Glider'] = df_flights['TotalTime'].loc[index]
         elif aircraftCategory=='rotorcraft_helicopter':
-            df_flights['Helicopter'].loc[index] = df_flights['TotalTime'].loc[index]
+            df_flights.loc[index,'Helicopter'] = df_flights['TotalTime'].loc[index]
         elif aircraftCategory=='airplane_single_engine_land':
-            df_flights['ASEL'].loc[index] = df_flights['TotalTime'].loc[index]
+            df_flights.loc[index,'ASEL'] = df_flights['TotalTime'].loc[index]
         elif aircraftCategory=='airplane_multi_engine_land':
-            df_flights['AMEL'].loc[index] = df_flights['TotalTime'].loc[index]
+            df_flights.loc[index,'AMEL'] = df_flights['TotalTime'].loc[index]
         if df_flights['TotalTime'].loc[index] and df_flights['Night'].loc[index]:
             day = float(df_flights['TotalTime'].loc[index]) - float(df_flights['Night'].loc[index])
-            df_flights['Day'].loc[index] = f'{day:8.1f}'
+            df_flights.loc[index,'Day'] = f'{day:8.1f}'
 
 
 if df_flights.loc[0]['Date'] > df_flights.loc[len(df_flights)-1]['Date']:
