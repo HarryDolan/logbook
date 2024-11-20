@@ -116,15 +116,17 @@ df_flights = df_flights.reindex (columns=new)
 #df_flights = df_flights.replace ('0.0','')
 
 #pd.set_option('display.max_columns', None)
+
+if df_flights.loc[0]['Date'] > df_flights.loc[len(df_flights)-1]['Date']:
+    df_flights = df_flights.iloc[::-1].reset_index(drop=True)
+
+
 print (df_flights)
 
 sys.exit(0)
 
 
 
-
-if df_flights.loc[0]['Date'] > df_flights.loc[len(df_flights)-1]['Date']:
-    df_flights = df_flights.iloc[::-1]      # reverse order of rows
 
 
 fmt1 = 190*'=' + '\n' + 'Page {:}' + '\n'
