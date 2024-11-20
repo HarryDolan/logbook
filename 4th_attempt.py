@@ -121,9 +121,9 @@ if df_flights.loc[0]['Date'] > df_flights.loc[len(df_flights)-1]['Date']:
     df_flights = df_flights.iloc[::-1].reset_index(drop=True)
 
 
-print (df_flights)
+#print (df_flights)
 
-sys.exit(0)
+#sys.exit(0)
 
 
 
@@ -163,7 +163,7 @@ def printLogEntries (df_flights):
 
         c = 0
         for col in columns:
-            val = entry[col['key']]
+            val = entry[col['ptitle']]
             typ = col['type']
             pwidth = col['pwidth']
             if val.strip() == "" or val=='0.0':
