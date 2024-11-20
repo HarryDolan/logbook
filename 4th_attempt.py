@@ -40,26 +40,26 @@ with open (path, 'r') as ff_file:
 df_aircraft.set_index("AircraftID", inplace = True)
 
 columns = [
-        {'key':  'Date',                 'type': 'text',  'pwidth': 11, 'fmt': '{:11s}',  'ptitle':'Date'},
-        {'key':  'Model',                'type': 'text',  'pwidth': 10, 'fmt': '{:10s}',  'ptitle':'Model'},
-        {'key':  'AircraftID',           'type': 'text',  'pwidth': 10, 'fmt': '{:10s}',  'ptitle':'Ident'},
-        {'key':  'From',                 'type': 'text',  'pwidth':  5, 'fmt': '{:5s}',   'ptitle':'From'},
-        {'key':  'To',                   'type': 'text',  'pwidth':  5, 'fmt': '{:5s}',   'ptitle':'To'},
-        {'key':  'PilotComments',        'type': 'text',  'pwidth': 40, 'fmt': '{:40s}',  'ptitle':'Comments'},
-        {'key':  'AllLandings',          'type': 'int',   'pwidth':  5, 'fmt': '{:5d}',   'ptitle':'Ldgs'},
-        {'key':  'Glider',               'type': 'float', 'pwidth':  8, 'fmt': '{:8.1f}', 'ptitle':'Gldr'},
-        {'key':  'Helicopter',           'type': 'float', 'pwidth':  8, 'fmt': '{:8.1f}', 'ptitle':'Heli'},
-        {'key':  'SEL',                  'type': 'float', 'pwidth':  8, 'fmt': '{:8.1f}', 'ptitle':'SEL'},
-        {'key':  'MEL',                  'type': 'float', 'pwidth':  8, 'fmt': '{:8.1f}', 'ptitle':'MEL'},
-        {'key':  'CrossCountry',         'type': 'float', 'pwidth':  8, 'fmt': '{:8.1f}', 'ptitle':'X/C'},
-        {'key':  'Day',                  'type': 'float', 'pwidth':  8, 'fmt': '{:8.1f}', 'ptitle':'Day'},
-        {'key':  'Night',                'type': 'float', 'pwidth':  8, 'fmt': '{:8.1f}', 'ptitle':'Night'},
-        {'key':  'ActualInstrument',     'type': 'float', 'pwidth':  8, 'fmt': '{:8.1f}', 'ptitle':'Inst'},
-        {'key':  'SimulatedInstrument',  'type': 'float', 'pwidth':  8, 'fmt': '{:8.1f}', 'ptitle':'Hooded'},
-        {'key':  'DualReceived',         'type': 'float', 'pwidth':  8, 'fmt': '{:8.1f}', 'ptitle':'Dual R'},
-        {'key':  'PIC',                  'type': 'float', 'pwidth':  8, 'fmt': '{:8.1f}', 'ptitle':'PIC'},
-        {'key':  'DualGiven',            'type': 'float', 'pwidth':  8, 'fmt': '{:8.1f}', 'ptitle':'Dual G'},
-        {'key':  'TotalTime',            'type': 'float', 'pwidth':  8, 'fmt': '{:8.1f}', 'ptitle':'Total'},
+        {'key':  'Date',                 'type': 'text',  'pwidth': 11, 'fmt': '{:<11}',  'ptitle':'Date'},
+        {'key':  'Model',                'type': 'text',  'pwidth': 10, 'fmt': '{:<10}',  'ptitle':'Model'},
+        {'key':  'AircraftID',           'type': 'text',  'pwidth': 10, 'fmt': '{:<10}',  'ptitle':'Ident'},
+        {'key':  'From',                 'type': 'text',  'pwidth':  5, 'fmt': '{:<5}',   'ptitle':'From'},
+        {'key':  'To',                   'type': 'text',  'pwidth':  5, 'fmt': '{:<5}',   'ptitle':'To'},
+        {'key':  'PilotComments',        'type': 'text',  'pwidth': 40, 'fmt': '{:<40}',  'ptitle':'Comments'},
+        {'key':  'AllLandings',          'type': 'int',   'pwidth':  5, 'fmt': '{:>5}',   'ptitle':'Ldgs'},
+        {'key':  'Glider',               'type': 'float', 'pwidth':  8, 'fmt': '{:>8}', 'ptitle':'Gldr'},
+        {'key':  'Helicopter',           'type': 'float', 'pwidth':  8, 'fmt': '{:>8}', 'ptitle':'Heli'},
+        {'key':  'SEL',                  'type': 'float', 'pwidth':  8, 'fmt': '{:>8}', 'ptitle':'SEL'},
+        {'key':  'MEL',                  'type': 'float', 'pwidth':  8, 'fmt': '{:>8}', 'ptitle':'MEL'},
+        {'key':  'CrossCountry',         'type': 'float', 'pwidth':  8, 'fmt': '{:>8}', 'ptitle':'X/C'},
+        {'key':  'Day',                  'type': 'float', 'pwidth':  8, 'fmt': '{:>8}', 'ptitle':'Day'},
+        {'key':  'Night',                'type': 'float', 'pwidth':  8, 'fmt': '{:>8}', 'ptitle':'Night'},
+        {'key':  'ActualInstrument',     'type': 'float', 'pwidth':  8, 'fmt': '{:>8}', 'ptitle':'Inst'},
+        {'key':  'SimulatedInstrument',  'type': 'float', 'pwidth':  8, 'fmt': '{:>8}', 'ptitle':'Hooded'},
+        {'key':  'DualReceived',         'type': 'float', 'pwidth':  8, 'fmt': '{:>8}', 'ptitle':'Dual R'},
+        {'key':  'PIC',                  'type': 'float', 'pwidth':  8, 'fmt': '{:>8}', 'ptitle':'PIC'},
+        {'key':  'DualGiven',            'type': 'float', 'pwidth':  8, 'fmt': '{:>8}', 'ptitle':'Dual G'},
+        {'key':  'TotalTime',            'type': 'float', 'pwidth':  8, 'fmt': '{:>8}', 'ptitle':'Total'},
     ]
 
 
@@ -130,18 +130,14 @@ if df_flights.loc[0]['Date'] > df_flights.loc[len(df_flights)-1]['Date']:
 
 
 fmt1 = 190*'=' + '\n' + 'Page {:}' + '\n'
-COL_NUMBERS_START = 7
-c = 0
 for col in columns:
-    c += 1
-    if c>=COL_NUMBERS_START:
-        fmt1 += '{:>{wid}s}'.format(col['ptitle'],wid=col['pwidth'])
-    else:
-        fmt1 += '{:<{wid}s}'.format(col['ptitle'],wid=col['pwidth'])
-
+    width = int(col['fmt'][3:-1])
+    fmt1 += col['fmt'].format(col['ptitle'])[0:width]
 
 ###############################################################################
 #
+COL_NUMBERS_START = 7
+
 def printLogEntries (df_flights):
     tot_page    = [0]*len(columns)
     tot_forward = [0]*len(columns)
@@ -157,8 +153,8 @@ def printLogEntries (df_flights):
     for index, row in df_flights.iterrows():
         entry = row
         entnum += 1
-        page = int(entnum / 7 + 1)
         if entnum%7==1:
+            page = int(entnum / 7 + 1)
             print (fmt1.format(page))
 
         c = 0
@@ -174,28 +170,6 @@ def printLogEntries (df_flights):
                 else:
                     strg = val + (pwidth - len(val)) * ' '
             print (strg[0:pwidth], end='')
-            # if typ=='text':
-            #     if len(val)>pwidth: val = val[0:pwidth]
-            #     str = col['fmt'].format(val)
-            # elif typ=='int':
-            #     try:
-            #         str = '{:>{wid}d}'.format(val,wid=pwidth)
-            #         tot_page[c] += val
-            #     except:
-            #         str = '{:>{wid}s}'.format(val,wid=pwidth)
-            #         if val != '':
-            #             tot_page[c] += int(val)
-            # elif typ=='float':
-            #     try:
-            #         str = '{:>{wid}.1f}'.format(val,wid=pwidth)
-            #         tot_page[c] += val
-            #     except:
-            #         str = '{:>{wid}s}'.format(val,wid=pwidth)
-            #         if val != '':
-            #             tot_page[c] += float(val)
-            # else:
-            #     str = 'xxxxx'
-            # print (str, sep='', end='')
             c += 1
         print ()
         if entnum%7==0:
