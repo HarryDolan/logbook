@@ -46,7 +46,7 @@ columns = [
         {'key':  'From',                 'type': 'text',  'pwidth':  5, 'fmt': '{:<5}',   'ptitle':'From'},
         {'key':  'To',                   'type': 'text',  'pwidth':  5, 'fmt': '{:<5}',   'ptitle':'To'},
         {'key':  'PilotComments',        'type': 'text',  'pwidth': 40, 'fmt': '{:<40}',  'ptitle':'Comments'},
-        {'key':  'AllLandings',          'type': 'int',   'pwidth':  5, 'fmt': '{:>5}',   'ptitle':'Ldgs'},
+        {'key':  'AllLandings',          'type': 'float',   'pwidth':  5, 'fmt': '{:>5}',   'ptitle':'Ldgs'},
         {'key':  'Glider',               'type': 'float', 'pwidth':  8, 'fmt': '{:>8}', 'ptitle':'Gldr'},
         {'key':  'Helicopter',           'type': 'float', 'pwidth':  8, 'fmt': '{:>8}', 'ptitle':'Heli'},
         {'key':  'SEL',                  'type': 'float', 'pwidth':  8, 'fmt': '{:>8}', 'ptitle':'SEL'},
@@ -113,20 +113,8 @@ for col in columns:
     
 df_flights = df_flights.reindex (columns=new)
 
-#df_flights = df_flights.replace ('0.0','')
-
-#pd.set_option('display.max_columns', None)
-
 if df_flights.loc[0]['Date'] > df_flights.loc[len(df_flights)-1]['Date']:
     df_flights = df_flights.iloc[::-1].reset_index(drop=True)
-
-
-#print (df_flights)
-
-#sys.exit(0)
-
-
-
 
 
 fmt1 = 190*'=' + '\n' + 'Page {:}' + '\n'
@@ -151,38 +139,34 @@ def printLogEntries (df_flights):
 
     entnum = 0
     for index, row in df_flights.iterrows():
-        entry = row
         entnum += 1
         if entnum%7==1:
             page = int(entnum / 7 + 1)
             print (fmt1.format(page))
 
-        c = 0
         for col in columns:
-            val = entry[col['ptitle']]
-            typ = col['type']
-            pwidth = col['pwidth']
-            if val.strip() == "" or val=='0.0':
-                strg = pwidth * ' '
-            else:
-                if c>=6:  #COL_NUMBERS_START:
-                    strg = (pwidth - len(val)) * ' ' + val
-                else:
-                    strg = val + (pwidth - len(val)) * ' '
-            print (strg[0:pwidth], end='')
-            c += 1
-        print ()
+            val = row[col['ptitle']]
+            width = int(col['fmt'][3:-1])
+            print (col['fmt'].format(val)[0:width], end='')
+
+        print()
+
+
+
+
         if entnum%7==0:
+            df_page = df_flights[index-6:index+1]
+            page_totals = df_page.sum(axis=0)
             print (66*' ', 123*'-')
             print (66*' ', 'Page total    ', end='')
             for  c in range(COL_NUMBERS_START-1,len(columns)):
-                if columns[c]['type']=='int':
-                    str = '{:{wid}d}'.format(tot_page[c],wid=columns[c]['pwidth'])
-                elif columns[c]['type']=='float':
-                    str = '{:{wid}.1f}'.format(tot_page[c],wid=columns[c]['pwidth'])
-                else:
-                    str = 'yyyyy'
-                print (str, sep='', end='')
+               if columns[c]['type']=='float':
+#                   tot_page[c] = df_page[columns[c]['ptitle']].astype(float).sum()
+                   tot_page[c] = pd.to_numeric(df_page[columns[c]['ptitle']]).sum()
+                   str = '{:{wid}.1f}'.format(tot_page[c],wid=columns[c]['pwidth'])
+               else:
+                   str = ''
+               print (str, sep='', end='')
             print ()
             print (66*' ', 'Amt. forward  ', end='')
             for  c in range(COL_NUMBERS_START-1,len(columns)):
