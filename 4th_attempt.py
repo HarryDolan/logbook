@@ -71,11 +71,11 @@ for dcol in df_flights.columns:
     if dcol not in keep:
         df_flights = df_flights.drop (dcol,axis=1)
         
-df_flights['Glider'] = '0.0'
-df_flights['Helicopter'] = '0.0'
-df_flights['SEL'] = '0.0'
-df_flights['MEL'] = '0.0'
-df_flights['Day'] = '0.0'
+df_flights['Glider'] = ''
+df_flights['Helicopter'] = ''
+df_flights['SEL'] = ''
+df_flights['MEL'] = ''
+df_flights['Day'] = ''
 #df_flights['Category'] = ''
 #df_flights = df_flights.assign (Category = lambda x: df_aircraft.loc[x['AircraftID']])
 df_flights['Model'] = ''
@@ -106,6 +106,8 @@ for index in range(len(df_flights)):
 for col in columns:
     df_flights.rename (columns={col['key']:col['ptitle']}, inplace=True)
     continue
+
+df_flights = df_flights.replace('0.0','')
 
 new = []
 for col in columns:
