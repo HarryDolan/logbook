@@ -125,60 +125,52 @@ for col in columns:
 
 ###############################################################################
 #
-COL_NUMBERS_START = 7
+COL_NUMBERS_START = 6
 
-def printLogEntries (df_flights):
-    tot_page    = [0]*len(columns)
-    tot_forward = [0]*len(columns)
-    tot_todate  = [0]*len(columns)
-    for c in range(COL_NUMBERS_START-1,len(columns)):
-        if columns[c]['type']=='int':
-            tot_forward[c] = 0
-        elif columns[c]['type']=='float':
-            tot_forward[c] = 0.0
-
-
-    entnum = 0
-    for index, row in df_flights.iterrows():
-        entnum += 1
-        if entnum%7==1:
-            page = int(entnum / 7 + 1)
-            print (fmt_heading.format(page))
-
-        for col in columns:
-            val = row[col['ptitle']]
-            width = int(col['fmt1'][3:-1])
-            print (col['fmt1'].format(val)[0:width], end='')
-
-        print()
+tot_page    = [0]*len(columns)
+tot_forward = [0]*len(columns)
+tot_todate  = [0]*len(columns)
+for c in range(COL_NUMBERS_START,len(columns)):
+    if columns[c]['type']=='int':
+        tot_forward[c] = 0
+    elif columns[c]['type']=='float':
+        tot_forward[c] = 0.0
 
 
+entnum = 0
+for index, row in df_flights.iterrows():
+    entnum += 1
+    if entnum%7==1:
+        page = int(entnum / 7 + 1)
+        print (fmt_heading.format(page))
 
+    for col in columns:
+        val = row[col['ptitle']]
+        width = int(col['fmt1'][3:-1])
+        print (col['fmt1'].format(val)[0:width], end='')
 
-        if entnum%7==0:
-            df_page = df_flights[index-6:index+1]
-            page_totals = df_page.sum(axis=0)
-            print (65*' ', 124*'-')
-            print (65*' ', 'Page total     ', end='')
-            for  c in range(COL_NUMBERS_START-1,len(columns)):
-                tot_page[c] = pd.to_numeric(df_page[columns[c]['ptitle']]).sum()
-                str = columns[c]['fmt2'].format(tot_page[c])
-                print (str, sep='', end='')
-            print ()
-            print (65*' ', 'Amt. forward   ', end='')
-            for  c in range(COL_NUMBERS_START-1,len(columns)):
-                str = columns[c]['fmt2'].format(tot_forward[c])
-                print (str, sep='', end='')
-            print ()
-            print (65*' ', 'Total to date  ', end='')
-            for  c in range(COL_NUMBERS_START-1,len(columns)):
-                tot_todate[c] += tot_page[c]
-                str = columns[c]['fmt2'].format(tot_todate[c])
-                print (str, sep='', end='')
-                tot_forward[c] = tot_todate[c]
-                tot_page[c] = 0
-            print ()
+    print()
 
-
-
-printLogEntries (df_flights)
+    if entnum%7==0:
+        df_page = df_flights[index-6:index+1]
+        page_totals = df_page.sum(axis=0)
+        print (65*' ', 124*'-')
+        print (65*' ', 'Page total     ', end='')
+        for  c in range(COL_NUMBERS_START,len(columns)):
+            tot_page[c] = pd.to_numeric(df_page[columns[c]['ptitle']]).sum()
+            str = columns[c]['fmt2'].format(tot_page[c])
+            print (str, end='')
+        print ()
+        print (65*' ', 'Amt. forward   ', end='')
+        for  c in range(COL_NUMBERS_START,len(columns)):
+            str = columns[c]['fmt2'].format(tot_forward[c])
+            print (str, end='')
+        print ()
+        print (65*' ', 'Total to date  ', end='')
+        for  c in range(COL_NUMBERS_START,len(columns)):
+            tot_todate[c] += tot_page[c]
+            str = columns[c]['fmt2'].format(tot_todate[c])
+            print (str, end='')
+            tot_forward[c] = tot_todate[c]
+            tot_page[c] = 0
+        print ()
