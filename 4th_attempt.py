@@ -1,20 +1,17 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
-Created on Fri Nov 15 16:11:37 2024
-
-@author: dolan
+Read csv file from Foreflight and print it in a way that it can be easily compared with written logbook.
 """
 import sys
 import csv
 import pandas as pd
+import re
 
 if len(sys.argv)==2:
     path = sys.argv[1]
 else:
     print ("Need one argument: file name.")
     sys.exit (1)
-    
 
 section = None
 df_aircraft = None
@@ -40,29 +37,29 @@ with open (path, 'r') as ff_file:
 df_aircraft.set_index("AircraftID", inplace = True)
 
 columns = [
-        {'key':  'Date',                 'pwidth': 11, 'fmt1': '{:<11}','fmt2': '{:<11s}',  'ptitle':'Date'},
-        {'key':  'Model',                'pwidth': 10, 'fmt1': '{:<10}','fmt2': '{:<10s}',  'ptitle':'Model'},
-        {'key':  'AircraftID',           'pwidth': 10, 'fmt1': '{:<10}','fmt2': '{:<10s}',  'ptitle':'Ident'},
-        {'key':  'From',                 'pwidth':  5, 'fmt1': '{:<5}', 'fmt2': '{:<5s}',   'ptitle':'From'},
-        {'key':  'To',                   'pwidth':  5, 'fmt1': '{:<5}', 'fmt2': '{:<5s}',   'ptitle':'To'},
-        {'key':  'PilotComments',        'pwidth': 40, 'fmt1': '{:<40}','fmt2': '{:<40s}',  'ptitle':'Comments'},
-        {'key':  'AllLandings',          'pwidth':  5, 'fmt1': '{:>5}', 'fmt2': '{:>5d}',   'ptitle':'Ldgs'},
-        {'key':  'Glider',               'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'Gldr'},
-        {'key':  'Helicopter',           'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'Heli'},
-        {'key':  'SEL',                  'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'SEL'},
-        {'key':  'MEL',                  'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'MEL'},
-        {'key':  'CrossCountry',         'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'X/C'},
-        {'key':  'Day',                  'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'Day'},
-        {'key':  'Night',                'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'Night'},
-        {'key':  'ActualInstrument',     'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'Inst'},
-        {'key':  'SimulatedInstrument',  'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'Hooded'},
-        {'key':  'DualReceived',         'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'Dual R'},
-        {'key':  'PIC',                  'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'PIC'},
-        {'key':  'DualGiven',            'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'Dual G'},
-        {'key':  'TotalTime',            'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'Total'},
+        {'key':  'Date',                 'fmt1': '{:<11s}',  'ptitle':'Date'},
+        {'key':  'Model',                'fmt1': '{:<10s}',  'ptitle':'Model'},
+        {'key':  'AircraftID',           'fmt1': '{:<10s}',  'ptitle':'Ident'},
+        {'key':  'From',                 'fmt1': '{:<5s}',   'ptitle':'From'},
+        {'key':  'To',                   'fmt1': '{:<5s}',   'ptitle':'To'},
+        {'key':  'PilotComments',        'fmt1': '{:<40s}',  'ptitle':'Comments'},
+        {'key':  'AllLandings',          'fmt1': '{:>5d}',   'ptitle':'Ldgs'},
+        {'key':  'Glider',               'fmt1': '{:>8.1f}', 'ptitle':'Gldr'},
+        {'key':  'Helicopter',           'fmt1': '{:>8.1f}', 'ptitle':'Heli'},
+        {'key':  'SEL',                  'fmt1': '{:>8.1f}', 'ptitle':'SEL'},
+        {'key':  'MEL',                  'fmt1': '{:>8.1f}', 'ptitle':'MEL'},
+        {'key':  'CrossCountry',         'fmt1': '{:>8.1f}', 'ptitle':'X/C'},
+        {'key':  'Day',                  'fmt1': '{:>8.1f}', 'ptitle':'Day'},
+        {'key':  'Night',                'fmt1': '{:>8.1f}', 'ptitle':'Night'},
+        {'key':  'ActualInstrument',     'fmt1': '{:>8.1f}', 'ptitle':'Inst'},
+        {'key':  'SimulatedInstrument',  'fmt1': '{:>8.1f}', 'ptitle':'Hooded'},
+        {'key':  'DualReceived',         'fmt1': '{:>8.1f}', 'ptitle':'Dual R'},
+        {'key':  'PIC',                  'fmt1': '{:>8.1f}', 'ptitle':'PIC'},
+        {'key':  'DualGiven',            'fmt1': '{:>8.1f}', 'ptitle':'Dual G'},
+        {'key':  'TotalTime',            'fmt1': '{:>8.1f}', 'ptitle':'Total'},
     ]
 
-
+# Remove unneeded columns from Foreflight data.
 keep=[]
 for col in columns:
     keep.append(col['key'])
@@ -70,14 +67,13 @@ for col in columns:
 for dcol in df_flights.columns:
     if dcol not in keep:
         df_flights = df_flights.drop (dcol,axis=1)
-        
+
+# Add more columns
 df_flights['Glider'] = ''
 df_flights['Helicopter'] = ''
 df_flights['SEL'] = ''
 df_flights['MEL'] = ''
 df_flights['Day'] = ''
-#df_flights['Category'] = ''
-#df_flights = df_flights.assign (Category = lambda x: df_aircraft.loc[x['AircraftID']])
 df_flights['Model'] = ''
 
 for index in range(len(df_flights)):
@@ -112,21 +108,24 @@ df_flights = df_flights.replace('0.0','')
 new = []
 for col in columns:
     new.append (col['ptitle'])
-    
+
 df_flights = df_flights.reindex (columns=new)
 
+# Reverse order of entries if necessary
 if df_flights.loc[0]['Date'] > df_flights.loc[len(df_flights)-1]['Date']:
     df_flights = df_flights.iloc[::-1].reset_index(drop=True)
 
+# Compute formats needed for printing
+for col in columns:
+    col['width'] = int(re.search(r'\d+', col['fmt1']).group(0))
+    col['fmt0']  = col['fmt1'][0:3] + str(col['width']) + '}'
+
 fmt_heading = 190*'=' + '\n' + 'Page {:}' + '\n'
 for col in columns:
-    width = int(col['fmt1'][3:-1])
-    fmt_heading += col['fmt1'].format(col['ptitle'])[0:width]
+    fmt_heading += col['fmt0'].format(col['ptitle'])[0:col['width']]
 
-###############################################################################
-#
+# Now print logbook
 COL_NUMBERS_START = 6
-
 tot_page    = [0]*len(columns)
 tot_forward = [0]*len(columns)
 tot_todate  = [0]*len(columns)
@@ -134,17 +133,18 @@ tot_todate  = [0]*len(columns)
 entnum = 0
 for index, row in df_flights.iterrows():
     entnum += 1
+# Print page header
     if entnum%7==1:
         page = int(entnum / 7 + 1)
         print (fmt_heading.format(page))
 
+# Print logbook entries
     for col in columns:
         val = row[col['ptitle']]
-        width = int(col['fmt1'][3:-1])
-        print (col['fmt1'].format(val)[0:width], end='')
-
+        print (col['fmt0'].format(val)[0:col['width']], end='')
     print()
 
+# Print page summary lines
     if entnum%7==0:
         df_page = df_flights[index-6:index+1]
         page_totals = df_page.sum(axis=0)
@@ -152,18 +152,18 @@ for index, row in df_flights.iterrows():
         print (65*' ', 'Page total     ', end='')
         for  c in range(COL_NUMBERS_START,len(columns)):
             tot_page[c] = pd.to_numeric(df_page[columns[c]['ptitle']]).sum()
-            str = columns[c]['fmt2'].format(tot_page[c])
+            str = columns[c]['fmt1'].format(tot_page[c])
             print (str, end='')
         print ()
         print (65*' ', 'Amt. forward   ', end='')
         for  c in range(COL_NUMBERS_START,len(columns)):
-            str = columns[c]['fmt2'].format(tot_forward[c])
+            str = columns[c]['fmt1'].format(tot_forward[c])
             print (str, end='')
         print ()
         print (65*' ', 'Total to date  ', end='')
         for  c in range(COL_NUMBERS_START,len(columns)):
             tot_todate[c] += tot_page[c]
-            str = columns[c]['fmt2'].format(tot_todate[c])
+            str = columns[c]['fmt1'].format(tot_todate[c])
             print (str, end='')
             tot_forward[c] = tot_todate[c]
             tot_page[c] = 0
