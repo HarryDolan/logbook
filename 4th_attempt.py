@@ -40,26 +40,26 @@ with open (path, 'r') as ff_file:
 df_aircraft.set_index("AircraftID", inplace = True)
 
 columns = [
-        {'key':  'Date',                 'type': 'text',  'pwidth': 11, 'fmt1': '{:<11}','fmt2': '{:<11s}',  'ptitle':'Date'},
-        {'key':  'Model',                'type': 'text',  'pwidth': 10, 'fmt1': '{:<10}','fmt2': '{:<10s}',  'ptitle':'Model'},
-        {'key':  'AircraftID',           'type': 'text',  'pwidth': 10, 'fmt1': '{:<10}','fmt2': '{:<10s}',  'ptitle':'Ident'},
-        {'key':  'From',                 'type': 'text',  'pwidth':  5, 'fmt1': '{:<5}', 'fmt2': '{:<5s}',   'ptitle':'From'},
-        {'key':  'To',                   'type': 'text',  'pwidth':  5, 'fmt1': '{:<5}', 'fmt2': '{:<5s}',   'ptitle':'To'},
-        {'key':  'PilotComments',        'type': 'text',  'pwidth': 40, 'fmt1': '{:<40}','fmt2': '{:<40s}',  'ptitle':'Comments'},
-        {'key':  'AllLandings',          'type': 'int',   'pwidth':  5, 'fmt1': '{:>5}', 'fmt2': '{:>5d}',   'ptitle':'Ldgs'},
-        {'key':  'Glider',               'type': 'float', 'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'Gldr'},
-        {'key':  'Helicopter',           'type': 'float', 'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'Heli'},
-        {'key':  'SEL',                  'type': 'float', 'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'SEL'},
-        {'key':  'MEL',                  'type': 'float', 'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'MEL'},
-        {'key':  'CrossCountry',         'type': 'float', 'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'X/C'},
-        {'key':  'Day',                  'type': 'float', 'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'Day'},
-        {'key':  'Night',                'type': 'float', 'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'Night'},
-        {'key':  'ActualInstrument',     'type': 'float', 'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'Inst'},
-        {'key':  'SimulatedInstrument',  'type': 'float', 'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'Hooded'},
-        {'key':  'DualReceived',         'type': 'float', 'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'Dual R'},
-        {'key':  'PIC',                  'type': 'float', 'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'PIC'},
-        {'key':  'DualGiven',            'type': 'float', 'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'Dual G'},
-        {'key':  'TotalTime',            'type': 'float', 'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'Total'},
+        {'key':  'Date',                 'pwidth': 11, 'fmt1': '{:<11}','fmt2': '{:<11s}',  'ptitle':'Date'},
+        {'key':  'Model',                'pwidth': 10, 'fmt1': '{:<10}','fmt2': '{:<10s}',  'ptitle':'Model'},
+        {'key':  'AircraftID',           'pwidth': 10, 'fmt1': '{:<10}','fmt2': '{:<10s}',  'ptitle':'Ident'},
+        {'key':  'From',                 'pwidth':  5, 'fmt1': '{:<5}', 'fmt2': '{:<5s}',   'ptitle':'From'},
+        {'key':  'To',                   'pwidth':  5, 'fmt1': '{:<5}', 'fmt2': '{:<5s}',   'ptitle':'To'},
+        {'key':  'PilotComments',        'pwidth': 40, 'fmt1': '{:<40}','fmt2': '{:<40s}',  'ptitle':'Comments'},
+        {'key':  'AllLandings',          'pwidth':  5, 'fmt1': '{:>5}', 'fmt2': '{:>5d}',   'ptitle':'Ldgs'},
+        {'key':  'Glider',               'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'Gldr'},
+        {'key':  'Helicopter',           'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'Heli'},
+        {'key':  'SEL',                  'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'SEL'},
+        {'key':  'MEL',                  'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'MEL'},
+        {'key':  'CrossCountry',         'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'X/C'},
+        {'key':  'Day',                  'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'Day'},
+        {'key':  'Night',                'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'Night'},
+        {'key':  'ActualInstrument',     'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'Inst'},
+        {'key':  'SimulatedInstrument',  'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'Hooded'},
+        {'key':  'DualReceived',         'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'Dual R'},
+        {'key':  'PIC',                  'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'PIC'},
+        {'key':  'DualGiven',            'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'Dual G'},
+        {'key':  'TotalTime',            'pwidth':  8, 'fmt1': '{:>8}', 'fmt2': '{:>8.1f}', 'ptitle':'Total'},
     ]
 
 
@@ -130,12 +130,6 @@ COL_NUMBERS_START = 6
 tot_page    = [0]*len(columns)
 tot_forward = [0]*len(columns)
 tot_todate  = [0]*len(columns)
-for c in range(COL_NUMBERS_START,len(columns)):
-    if columns[c]['type']=='int':
-        tot_forward[c] = 0
-    elif columns[c]['type']=='float':
-        tot_forward[c] = 0.0
-
 
 entnum = 0
 for index, row in df_flights.iterrows():
