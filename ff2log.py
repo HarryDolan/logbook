@@ -81,7 +81,7 @@ for index in range(len(df_flights)):
     if aircraftID!='':
         aircraftModel = df_aircraft.loc[aircraftID]['TypeCode']
         df_flights.loc[index,'Model'] = aircraftModel
-        aircraftCategory = df_aircraft.loc[aircraftID]['Category/Class']
+        aircraftCategory = df_aircraft.loc[aircraftID]['aircraftClass (FAA)']
 
         if aircraftCategory=='glider':
             df_flights.loc[index,'Glider'] = df_flights['TotalTime'].loc[index]
