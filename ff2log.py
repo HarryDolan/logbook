@@ -25,7 +25,7 @@ with open (path, 'r') as ff_file:
         elif line[0]=='Aircraft Table':
             section = 'aircraft'
             df_aircraft = pd.DataFrame (columns=next(lines))
-        elif line[0]=='Flights Table':
+        elif line[0]=='Flights Table' or line[0]=='Flights Table ':
             section = 'flights'
             df_flights = pd.DataFrame (columns=next(lines))
         elif section=='aircraft':
